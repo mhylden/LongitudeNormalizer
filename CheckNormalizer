@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using GISUtility;
+
+namespace CheckNormalizer
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            try
+            {
+                if (args.Length == 0)
+                    CheckTestValues();
+                else if (args.Length == 1)
+                    CheckPassedValue(Convert.ToDecimal(args[0]));
+                else if (args.Length == 3)
+                    CheckPassedValue(Convert.ToDecimal(args[0]), Convert.ToDecimal(args[1]), Convert.ToDecimal(args[2]));
+                else
+                {
+                    Console.WriteLine("Invalid parameters passed. Options are:");
+                    Console.WriteLine("  no parameters (run given test values) ");
+                    Console.WriteLine("  one parameter (longitude in decimal degrees) ");
+                    Console.WriteLine("  three parameters (longitude in deg, min, sec) ");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception processing values: {0}", ex.Message);
+            }
+
+            Console.WriteLine("Press any key to close the program");
+            Console.ReadKey();
+        }
+
+        static void CheckTestValues()
+        {
+            Console.WriteLine(" 190  Normalizes to {0}", LongitudeNormalizer.NormalizeLongitude(190M));
+            Console.WriteLine(" -210 Normalizes to {0}", LongitudeNormalizer.NormalizeLongitude(-210M));
+            Console.WriteLine(" 720  Normalizes to {0}", LongitudeNormalizer.NormalizeLongitude(720M));
+            Console.WriteLine(" -750 Normalizes to {0}", LongitudeNormalizer.NormalizeLongitude(-750M));
+            Console.WriteLine(" -890 Normalizes to {0}", LongitudeNormalizer.NormalizeLongitude(-890M));
+            Console.WriteLine(" 920  Normalizes to {0}", LongitudeNormalizer.NormalizeLongitude(920M));
+        }
+
+        static void CheckPassedValue(decimal lonDD)
+        {
+            Console.WriteLine(" {0}  Normalizes to {1}", lonDD, LongitudeNormalizer.NormalizeLongitude(lonDD));
+        }
+
+        static void CheckPassedValue(decimal lonDeg, decimal lonMin, decimal lonSec)
+        {
+            Console.WriteLine(" {0} {1} {2}  Normalizes to {3}", lonDeg, lonMin, lonSec, LongitudeNormalizer.NormalizeLongitude(lonDeg, lonMin, lonSec));
+        }
+    }
+}
